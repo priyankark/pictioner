@@ -1,15 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import SSE from 'ssestream'
 import { EventSourceMessage, fetchEventSource } from '@ai-zen/node-fetch-event-source'
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    // res.setHeader('Cache-Control', 'no-cache');
-    // res.setHeader('Content-Type', 'text/event-stream');
-    // res.setHeader('Access-Control-Allow-Origin', '*');
-    // res.setHeader('Connection', 'keep-alive');
     res.writeHead(200, {
         'Cache-Control': 'no-cache',
         'Content-Type': 'text/event-stream',
@@ -45,23 +40,4 @@ export default async function handler(
             res.end();
         }
     });
-
-    // if (stream) {
-    //     stream.on('data', (chunk: Buffer) => {
-    //         const data = chunk.toString().replace('data: ', '').trim();
-    //         console.log(data);
-    //         if(data==="data: [DONE]") {
-    //                         res.write(data);
-    //             res.end();
-    //         }
-    //         res.write(data);
-    //     });
-
-    //     stream.on('end', () => {
-    //         res.status(200);
-    //         res.end();
-    //     })
-    // } else {
-    //     res.end();
-    // }
 }

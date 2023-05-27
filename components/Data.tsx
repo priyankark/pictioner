@@ -1,4 +1,49 @@
 import { useEffect, useRef, useState } from 'react'
+import { Box, Button, Input, chakra } from '@chakra-ui/react';
+
+const AssistantMessage = chakra(Box, {
+  baseStyle: {
+    p: '4',
+    borderRadius: 'md',
+    bg: 'gray.200',
+    mb: '4',
+  },
+});
+
+const UserMessage = chakra(Box, {
+  baseStyle: {
+    p: '4',
+    borderRadius: 'md',
+    bg: 'teal.200',
+    mb: '4',
+  },
+});
+
+const StartButton = chakra(Button, {
+  baseStyle: {
+    fontSize: 'xl',
+    px: '8',
+    py: '4',
+    bg: 'teal.500',
+    color: 'white',
+    borderRadius: 'md',
+    _hover: {
+      bg: 'teal.600',
+    },
+  },
+});
+
+const UserInput = chakra(Input, {
+  baseStyle: {
+    borderRadius: 'md',
+    bg: 'white',
+    border: '1px solid gray',
+    p: '2',
+    mr: '2',
+    flex: '1',
+  },
+});
+
 
 export default function Home() {
   const [data, setData] = useState<string>('')
@@ -83,72 +128,81 @@ export default function Home() {
   }, [currentTurn, userInput])
 
   return (
-    <div>
-      <canvas id="canvas" width="500" height="500" ref={canvasRef}></canvas>
-      <div key={currentTurn}>
-        {
-          chatHistory.current.length === 0 && <button onClick={() => setCurrentTurn('assistant')}>
-            {'Start the game'}
-          </button>
-        }
-        {
-          chatHistory.current.map((ele, idx) => {
-            /** Remove evrything starting from ctx.beginStroke() and only display the rest */
+    (
+      <Box>
+        <canvas id="canvas" width="500" height="500" ref={canvasRef}></canvas>
+        <Box key={currentTurn}>
+          {chatHistory.current.length === 0 && (
+            <StartButton onClick={() => setCurrentTurn('assistant')} size="sm">
+              Start the game
+            </StartButton>
+          )}
+          {chatHistory.current.map((ele, idx) => {
             if (ele.role === 'assistant') {
-
-              /** Using Regex remove '~ Answer ~' pattern from sanitizedText */
               const sanitizedTextWithoutAnswer = ele.content.replace(/~[^~]*~/g, '');
               const ctxIndex = sanitizedTextWithoutAnswer.indexOf('ctx');
               if (ctxIndex !== -1) {
                 const sanitizeText = sanitizedTextWithoutAnswer.slice(0, ctxIndex);
-                return <div key={idx}>
-                  <p>{ele.role}</p>
-                  <p>{sanitizeText}</p>
-                </div>
+                return (
+                  <AssistantMessage key={idx}>
+                    <p>{ele.role}</p>
+                    <p>{sanitizeText}</p>
+                  </AssistantMessage>
+                );
               }
-              return <div key={idx}>
-                <p>{ele.role}</p>
-                <p>{sanitizedTextWithoutAnswer}</p>
-              </div>
+              return (
+                <AssistantMessage key={idx}>
+                  <p>{ele.role}</p>
+                  <p>{sanitizedTextWithoutAnswer}</p>
+                </AssistantMessage>
+              );
             }
             if (ele.role === 'user') {
-              /** Remove Previous drawings history */
               if (ele.content.includes('Previous round drawings')) {
-                return <div key={idx}>
-                  <p>{ele.role}</p>
-                  <p>{ele.content.slice(0, ele.content.indexOf('Previous round drawings'))}</p>
-                </div>
+                return (
+                  <UserMessage key={idx}>
+                    <p>{ele.role}</p>
+                    <p>{ele.content.slice(0, ele.content.indexOf('Previous round drawings'))}</p>
+                  </UserMessage>
+                );
               }
             }
-            return <div key={idx}>
-              <p>{ele.role}</p>
-              <p>{ele.content}</p>
-            </div>
-          }
-          )
-        }
-        {
-          currentTurn === 'user' && chatHistory.current.length > 0 && !chatHistory.current[chatHistory.current.length - 1]?.content.includes("YOU WIN") && <div>
-            <input type='text' onChange={(ev) => setUserinput(ev.target.value)} />
-            <button onClick={() => setCurrentTurn('assistant')}>
-              {'Submit'}
-            </button>
-          </div>
-        }
-        {
-          chatHistory.current[chatHistory.current.length - 1]?.content?.includes("YOU WIN") && <button onClick={() => {
-            setCurrentRoundNumber(n => n + 1);
-            previousRoundsDrawings.current.push(chatHistory.current[chatHistory.current.length - 2]?.content);
-            console.log(`previousRoundDrawings`, previousRoundsDrawings.current);
-            setUserinput(`start round ${currentRoundNumber + 1}. Previous round drawings were: ${previousRoundsDrawings.current.join(', ')} Please AVOID drawing these again this round and future rounds.`);
-            setCurrentTurn('assistant');
-            canvasRef.current?.getContext('2d')?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-            /** Remove everything from chat history except the last element */
-            chatHistory.current = [];
-            setNextRoundButton(false);
-          }}>{'Start next round'}</button>
-        }
-      </div>
-    </div>
-  )
+            return (
+              <UserMessage key={idx}>
+                <p>{ele.role}</p>
+                <p>{ele.content}</p>
+              </UserMessage>
+            );
+          })}
+          {currentTurn === 'user' && chatHistory.current.length > 0 && !chatHistory.current[chatHistory.current.length - 1]?.content.includes('YOU WIN') && (
+            <UserMessage>
+              <p>User</p>
+              <UserInput type="text" onChange={(ev) => setUserinput(ev.target.value)} />
+              <Button onClick={() => setCurrentTurn('assistant')} size="sm">
+                Submit
+              </Button>
+            </UserMessage>
+          )}
+          {chatHistory.current[chatHistory.current.length - 1]?.content?.includes('YOU WIN') && (
+            <Button
+              onClick={() => {
+                setCurrentRoundNumber((n) => n + 1);
+                previousRoundsDrawings.current.push(chatHistory.current[chatHistory.current.length - 2]?.content);
+                console.log(`previousRoundDrawings`, previousRoundsDrawings.current);
+                setUserinput(
+                  `start round ${currentRoundNumber + 1}. Previous round drawings were: ${previousRoundsDrawings.current.join(', ')} Please AVOID drawing these again this round and future rounds.`
+                );
+                setCurrentTurn('assistant');
+                canvasRef.current?.getContext('2d')?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+                chatHistory.current = []; // Remove everything from chat history except the last element
+                setNextRoundButton(false);
+              }}
+            >
+              Start next round
+            </Button>
+          )}
+        </Box>
+      </Box>
+    )
+  );
 }

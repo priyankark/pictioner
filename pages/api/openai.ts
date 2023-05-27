@@ -1,5 +1,6 @@
+import { fetchEventSource } from '@/utils/eventsource';
+import { EventSourceMessage } from '@/utils/parse';
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { EventSourceMessage, fetchEventSource } from '@ai-zen/node-fetch-event-source'
 
 export default async function handler(
     req: NextApiRequest,

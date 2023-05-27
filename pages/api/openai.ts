@@ -15,6 +15,10 @@ export default async function handler(
         'Content-Encoding': 'none'
     });
 
+    console.log(req.query);
+
+    const history = JSON.parse((req.query.history as string) ?? "[]");
+
     fetchEventSource('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -22,14 +26,13 @@ export default async function handler(
             'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
         },
         body: JSON.stringify({
-            messages: [...basePrompt, { role: 'user', content: 'start the game' }],
-            "model": "gpt-3.5-turbo",
+            messages: [...basePrompt, ...history],
+            "model": "gpt-4",
             stream: true,
             max_tokens: 2000,
-            temperature: 0.3
+            temperature: 0.5
         }),
         onmessage: (event: EventSourceMessage) => {
-            console.log(event);
             res.write(`data: ${event.data}\n\n`);
             if (event.data === "[DONE]") {
                 res.end();

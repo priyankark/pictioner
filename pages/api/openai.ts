@@ -30,9 +30,10 @@ export default async function handler(
             "model": "gpt-4",
             stream: true,
             max_tokens: 2000,
-            temperature: 0.5
+            temperature: 0.2
         }),
         onmessage: (event: EventSourceMessage) => {
+            //console.log(event);
             res.write(`data: ${event.data}\n\n`);
             if (event.data === "[DONE]") {
                 res.end();

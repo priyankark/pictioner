@@ -9,7 +9,11 @@ export default function Home() {
     content: string
   })[]>([]);
   const [currentTurn, setCurrentTurn] = useState<'user' | 'assistant'>('user');
-  const [userInput, setUserinput] = useState<string>('start the game');
+  const [currentRoundNumber, setCurrentRoundNumber] = useState(1);
+  const [userInput, setUserinput] = useState<string>('start round 1');
+  const [showNextRoundButton, setNextRoundButton] = useState(false);
+
+  const previousRoundsDrawings = useRef<string[]>([]);
 
   useEffect(() => {
     if (currentTurn === 'assistant') {
@@ -90,6 +94,15 @@ export default function Home() {
                 </div>
               }
             }
+            if (ele.role === 'user') {
+              /** Remove Previous drawings history */
+              if (ele.content.includes('Previous round drawings')) {
+                return <div>
+                  <p>{ele.role}</p>
+                  <p>{ele.content.slice(0, ele.content.indexOf('Previous round drawings'))}</p>
+                </div>
+              }
+            }
             return <div>
               <p>{ele.role}</p>
               <p>{ele.content}</p>
@@ -98,12 +111,25 @@ export default function Home() {
           )
         }
         {
-          currentTurn === 'user' && chatHistory.current.length > 0 && <div>
+          currentTurn === 'user' && chatHistory.current.length > 0 && !chatHistory.current[chatHistory.current.length - 1]?.content.includes("YOU WIN") && <div>
             <input type='text' onChange={(ev) => setUserinput(ev.target.value)} />
             <button onClick={() => setCurrentTurn('assistant')}>
               {'Submit'}
             </button>
           </div>
+        }
+        {
+          chatHistory.current[chatHistory.current.length - 1]?.content?.includes("YOU WIN") && <button onClick={() => {
+            setCurrentRoundNumber(n => n + 1);
+            previousRoundsDrawings.current.push(chatHistory.current[chatHistory.current.length - 2]?.content);
+            console.log(`previousRoundDrawings`, previousRoundsDrawings.current);
+            setUserinput(`start round ${currentRoundNumber + 1}. Previous round drawings were: ${previousRoundsDrawings.current.join(', ')} Please AVOID drawing these again this round and future rounds.`);
+            setCurrentTurn('assistant');
+            canvasRef.current?.getContext('2d')?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+            /** Remove everything from chat history except the last element */
+            chatHistory.current = [];
+            setNextRoundButton(false);
+          }}>{'Start next round'}</button>
         }
       </div>
     </div>

@@ -14,7 +14,7 @@ export default function Home() {
         eventSource.close()
       } else {
         const { choices } = JSON.parse(sanitized)
-        const text = choices[0].text
+        const text = choices[0].delta?.content ?? ''
         console.log(text);
         setData(prev => prev + text)
       }

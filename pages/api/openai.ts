@@ -1,5 +1,6 @@
-import { fetchEventSource } from '@/utils/eventsource';
-import { EventSourceMessage } from '@/utils/parse';
+import { fetchEventSource } from '@/utils/eventsource/eventsource';
+import { EventSourceMessage } from '@/utils/eventsource/parse';
+import { basePrompt } from '@/utils/prompt/basePrompt';
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(
@@ -14,17 +15,17 @@ export default async function handler(
         'Content-Encoding': 'none'
     });
 
-    fetchEventSource('https://api.openai.com/v1/completions', {
+    fetchEventSource('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
         },
         body: JSON.stringify({
-            prompt: 'Hello, World! How',
-            "model": "text-davinci-003",
+            messages: [...basePrompt, { role: 'user', content: 'start the game' }],
+            "model": "gpt-3.5-turbo",
             stream: true,
-            max_tokens: 5
+            max_tokens: 2000
         }),
         onmessage: (event: EventSourceMessage) => {
             console.log(event);

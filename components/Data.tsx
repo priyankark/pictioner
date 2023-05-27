@@ -132,7 +132,7 @@ export default function Home() {
       <Box>
         <canvas id="canvas" width="500" height="500" ref={canvasRef}></canvas>
         <Box key={currentTurn}>
-          {chatHistory.current.length === 0 && (
+          {chatHistory.current.length === 0 && currentRoundNumber === 1 && (
             <StartButton onClick={() => setCurrentTurn('assistant')} size="sm">
               Start the game
             </StartButton>
@@ -174,7 +174,7 @@ export default function Home() {
               </UserMessage>
             );
           })}
-          {currentTurn === 'user' && chatHistory.current.length > 0 && !chatHistory.current[chatHistory.current.length - 1]?.content.includes('YOU WIN') && (
+          {currentTurn === 'user' && chatHistory.current.length > 0 && !chatHistory.current[chatHistory.current.length - 1]?.content.includes('YOU WIN') && !chatHistory.current[chatHistory.current.length - 1]?.content.includes('YOU LOSE') && (
             <UserMessage>
               <p>User</p>
               <UserInput type="text" onChange={(ev) => setUserinput(ev.target.value)} />
@@ -183,23 +183,42 @@ export default function Home() {
               </Button>
             </UserMessage>
           )}
-          {chatHistory.current[chatHistory.current.length - 1]?.content?.includes('YOU WIN') && (
-            <Button
-              onClick={() => {
-                setCurrentRoundNumber((n) => n + 1);
-                previousRoundsDrawings.current.push(chatHistory.current[chatHistory.current.length - 2]?.content);
-                console.log(`previousRoundDrawings`, previousRoundsDrawings.current);
-                setUserinput(
-                  `start round ${currentRoundNumber + 1}. Previous round drawings were: ${previousRoundsDrawings.current.join(', ')} Please AVOID drawing these again this round and future rounds.`
-                );
-                setCurrentTurn('assistant');
-                canvasRef.current?.getContext('2d')?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-                chatHistory.current = []; // Remove everything from chat history except the last element
-                setNextRoundButton(false);
-              }}
-            >
-              Start next round
-            </Button>
+          {(chatHistory.current[chatHistory.current.length - 1]?.content?.includes('YOU WIN') || chatHistory.current[chatHistory.current.length - 1]?.content?.includes('YOU LOSE')) && (
+            <Box alignItems={'horizontal'}>
+              <Box>
+                <Button
+                  onClick={() => {
+                    if (chatHistory.current[chatHistory.current.length - 1]?.content?.includes('YOU WIN')) {
+                      setCurrentRoundNumber((n) => n + 1);
+                      previousRoundsDrawings.current.push(chatHistory.current[chatHistory.current.length - 2]?.content);
+                      console.log(`previousRoundDrawings`, previousRoundsDrawings.current);
+                      setUserinput(
+                        `start round ${currentRoundNumber + 1}. Previous round drawings were: ${previousRoundsDrawings.current.join(', ')} Please AVOID drawing these again this round and future rounds.`
+                      );
+                      setCurrentTurn('assistant');
+                      canvasRef.current?.getContext('2d')?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+                      chatHistory.current = []; // Remove everything from chat history except the last element
+                      setNextRoundButton(false);
+                    } else {
+                      setCurrentRoundNumber(1);
+                      previousRoundsDrawings.current = [];
+                      setUserinput(`start round 1`);
+                      setCurrentTurn('assistant');
+                      canvasRef.current?.getContext('2d')?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+                      chatHistory.current = []; // Remove everything from chat history except the last element
+                      setNextRoundButton(false);
+                    }
+                  }}
+                >
+                  {chatHistory.current[chatHistory.current.length - 1]?.content?.includes('YOU WIN') ? 'Start next round' : 'Retry'}
+                </Button>
+              </Box>
+              <Box>
+                <Button>
+                  {'Enter Leaderboard'}
+                </Button>
+              </Box>
+            </Box>
           )}
         </Box>
       </Box>

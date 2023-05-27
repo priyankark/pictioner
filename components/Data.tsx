@@ -92,7 +92,7 @@ export default function Home() {
           </button>
         }
         {
-          chatHistory.current.map(ele => {
+          chatHistory.current.map((ele, idx) => {
             /** Remove evrything starting from ctx.beginStroke() and only display the rest */
             if (ele.role === 'assistant') {
 
@@ -101,12 +101,12 @@ export default function Home() {
               const ctxIndex = sanitizedTextWithoutAnswer.indexOf('ctx');
               if (ctxIndex !== -1) {
                 const sanitizeText = sanitizedTextWithoutAnswer.slice(0, ctxIndex);
-                return <div>
+                return <div key={idx}>
                   <p>{ele.role}</p>
                   <p>{sanitizeText}</p>
                 </div>
               }
-              return <div>
+              return <div key={idx}>
                 <p>{ele.role}</p>
                 <p>{sanitizedTextWithoutAnswer}</p>
               </div>
@@ -114,13 +114,13 @@ export default function Home() {
             if (ele.role === 'user') {
               /** Remove Previous drawings history */
               if (ele.content.includes('Previous round drawings')) {
-                return <div>
+                return <div key={idx}>
                   <p>{ele.role}</p>
                   <p>{ele.content.slice(0, ele.content.indexOf('Previous round drawings'))}</p>
                 </div>
               }
             }
-            return <div>
+            return <div key={idx}>
               <p>{ele.role}</p>
               <p>{ele.content}</p>
             </div>

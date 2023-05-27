@@ -12,6 +12,7 @@ export default function Home() {
   const [currentRoundNumber, setCurrentRoundNumber] = useState(1);
   const [userInput, setUserinput] = useState<string>('start round 1');
   const [showNextRoundButton, setNextRoundButton] = useState(false);
+  const currentRoundAnswerRef = useRef('');
 
   const previousRoundsDrawings = useRef<string[]>([]);
 
@@ -57,7 +58,15 @@ export default function Home() {
               currentInstructionRef.current += text;
             }
           } else {
-            setData(prev => prev + text)
+            if (text.includes('~')) {
+              if (currentRoundAnswerRef.current) currentRoundAnswerRef.current = '';
+              else currentRoundAnswerRef.current = text;
+            }
+            if (currentRoundAnswerRef.current) {
+              currentRoundAnswerRef.current += text;
+            } else {
+              setData(prev => prev + text)
+            }
           }
         }
       }
@@ -86,13 +95,21 @@ export default function Home() {
           chatHistory.current.map(ele => {
             /** Remove evrything starting from ctx.beginStroke() and only display the rest */
             if (ele.role === 'assistant') {
-              const ctxIndex = ele.content.indexOf('ctx');
+
+              /** Using Regex remove '~ Answer ~' pattern from sanitizedText */
+              const sanitizedTextWithoutAnswer = ele.content.replace(/~[^~]*~/g, '');
+              const ctxIndex = sanitizedTextWithoutAnswer.indexOf('ctx');
               if (ctxIndex !== -1) {
+                const sanitizeText = sanitizedTextWithoutAnswer.slice(0, ctxIndex);
                 return <div>
                   <p>{ele.role}</p>
-                  <p>{ele.content.slice(0, ctxIndex)}</p>
+                  <p>{sanitizeText}</p>
                 </div>
               }
+              return <div>
+                <p>{ele.role}</p>
+                <p>{sanitizedTextWithoutAnswer}</p>
+              </div>
             }
             if (ele.role === 'user') {
               /** Remove Previous drawings history */

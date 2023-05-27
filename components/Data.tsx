@@ -26,6 +26,7 @@ export default function Home() {
           console.log(`Current Instruction`, currentInstructionRef.current);
           if (text.includes(';')) {
             eval(currentInstructionRef.current + text);
+            ctx?.stroke();
             currentInstructionRef.current = '';
           } else {
             currentInstructionRef.current += text;

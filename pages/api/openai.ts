@@ -25,7 +25,8 @@ export default async function handler(
             messages: [...basePrompt, { role: 'user', content: 'start the game' }],
             "model": "gpt-3.5-turbo",
             stream: true,
-            max_tokens: 2000
+            max_tokens: 2000,
+            temperature: 0.3
         }),
         onmessage: (event: EventSourceMessage) => {
             console.log(event);

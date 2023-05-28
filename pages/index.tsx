@@ -2,7 +2,11 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
-import Data from '../components/Data';
+import dynamic from 'next/dynamic'
+const Data = dynamic(
+  () => import('../components/Data'),
+  { ssr: false }
+)
 
 const inter = Inter({ subsets: ['latin'] })
 

@@ -10,6 +10,8 @@ const Data = dynamic(
   { ssr: false }
 )
 
+const SSR = typeof window === 'undefined';
+
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
@@ -22,7 +24,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
-        <Data />
+        {!SSR && <Data />}
       </main>
     </>
   )

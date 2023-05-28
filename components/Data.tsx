@@ -60,6 +60,7 @@ export default function Home() {
   const [userInput, setUserinput] = useState<string>('start round 1');
   const [showNextRoundButton, setNextRoundButton] = useState(false);
   const currentRoundAnswerRef = useRef('');
+  const [hasGameStarted, setHasGameStarted] = useState(false);
 
   const previousRoundsDrawings = useRef<string[]>([]);
 
@@ -136,16 +137,23 @@ export default function Home() {
   return (
     (<Suspense fallback={<div>Loading...</div>}>
       <Box>
-        <canvas id="canvas" width="500" height="500" ref={canvasRef}></canvas>
         <Box key={currentTurn}>
           {chatHistory.current.length === 0 && currentRoundNumber === 1 && (
-            <>
-              <GameStart />
-              <StartButton onClick={() => setCurrentTurn('assistant')} size="sm">
-                Start the game
-              </StartButton>
-            </>
+            <Box verticalAlign={'space-between'} alignItems={'center'} gap={20}>
+              <Box>
+                <GameStart />
+              </Box>
+              <Box alignItems={'center'} justifyContent={'center'} style={{ paddingLeft: 50 }}>
+                <StartButton onClick={() => {
+                  setHasGameStarted(true);
+                  setCurrentTurn('assistant')
+                }} size="sm">
+                  Start the game
+                </StartButton>
+              </Box>
+            </Box>
           )}
+          {hasGameStarted && <canvas id="canvas" width="500" height="500" ref={canvasRef}></canvas>}
           {chatHistory.current.map((ele, idx) => {
             if (ele.role === 'assistant') {
               const sanitizedTextWithoutAnswer = ele.content.replace(/~[^~]*~/g, '');

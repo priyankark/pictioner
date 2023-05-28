@@ -1,11 +1,11 @@
 import React from 'react';
 import Image from 'next/image';
-import Animation from '../public/AnimationFrontPage.gif';
+import PictionaryLogo from '../public/pictionary_logo.svg';
 
 export const GameStart = () => {
     return (
         <div>
-            <Image src={Animation} alt="Animation" />
+            <Image src={PictionaryLogo} alt='pictionary' />
         </div>
     )
 }

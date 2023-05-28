@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useRef, useState } from 'react'
 import { Box, Button, Input, chakra } from '@chakra-ui/react';
 

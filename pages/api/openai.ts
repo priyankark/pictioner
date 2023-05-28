@@ -8,7 +8,7 @@ export default async function handler(
     res: NextApiResponse
 ) {
     res.writeHead(200, {
-        'Cache-Control': 'no-cache',
+        'Cache-Control': 'no-cache, no-transform',
         'Content-Type': 'text/event-stream',
         'Access-Control-Allow-Origin': '*',
         'Connection': 'keep-alive',
@@ -35,8 +35,10 @@ export default async function handler(
             onmessage: (event: EventSourceMessage) => {
                 //console.log(event);
                 res.write(`data: ${event.data}\n\n`);
+                res.flushHeaders();
                 if (event.data === "[DONE]") {
                     res.end();
+                    return;
                 }
             },
             onerror: (error: Error) => {

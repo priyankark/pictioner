@@ -96,7 +96,11 @@ export default function Home() {
           } else if (currentInstructionRef.current) {
             console.log(`Current Instruction`, currentInstructionRef.current);
             if (text.includes(';')) {
-              eval(currentInstructionRef.current + text);
+              try {
+                eval(currentInstructionRef.current + text);
+              } catch (ex) {
+                console.error(ex);
+              }
               ctx?.stroke();
               currentInstructionRef.current = '';
             } else {
@@ -193,7 +197,7 @@ export default function Home() {
                       previousRoundsDrawings.current.push(chatHistory.current[chatHistory.current.length - 2]?.content);
                       console.log(`previousRoundDrawings`, previousRoundsDrawings.current);
                       setUserinput(
-                        `start round ${currentRoundNumber + 1}. Previous round drawings were: ${previousRoundsDrawings.current.join(', ')} Please AVOID drawing these again this round and future rounds.`
+                        `start round ${currentRoundNumber + 1}. Previous round drawings were: ${previousRoundsDrawings.current.join(', ')}. Please AVOID drawing these again this round and in future rounds.`
                       );
                       setCurrentTurn('assistant');
                       canvasRef.current?.getContext('2d')?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);

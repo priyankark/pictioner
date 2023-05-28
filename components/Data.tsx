@@ -68,7 +68,7 @@ export default function Home() {
         role: 'user',
         content: userInput
       }]
-      const eventSource = new EventSource(`/api/openai?history=${encodeURIComponent(JSON.stringify(chatHistory.current))}`)
+      const eventSource = new EventSource(`/api/openaiedge?history=${encodeURIComponent(JSON.stringify(chatHistory.current))}`)
 
       eventSource.onmessage = (event) => {
         console.log('initiate');

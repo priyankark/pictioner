@@ -137,7 +137,7 @@ export default function Home() {
   return (
     (<Suspense fallback={<div>Loading...</div>}>
       <Box>
-        <Box key={currentTurn}>
+        <Box>
           {chatHistory.current.length === 0 && currentRoundNumber === 1 && (
             <Box verticalAlign={'space-between'} alignItems={'center'} gap={20}>
               <Box>

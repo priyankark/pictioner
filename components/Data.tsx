@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, Suspense } from 'react'
 import { Box, Button, Input, chakra } from '@chakra-ui/react';
 
 const AssistantMessage = chakra(Box, {
@@ -133,7 +133,7 @@ export default function Home() {
   }, [currentTurn, userInput])
 
   return (
-    (
+    (<Suspense fallback={<div>Loading...</div>}>
       <Box>
         <canvas id="canvas" width="500" height="500" ref={canvasRef}></canvas>
         <Box key={currentTurn}>
@@ -227,6 +227,7 @@ export default function Home() {
           )}
         </Box>
       </Box>
+    </Suspense>
     )
   );
 }

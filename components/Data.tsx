@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState, Suspense } from 'react'
 import { Box, Button, Input, chakra } from '@chakra-ui/react';
+import { GameStart } from './GameStart';
 
 const AssistantMessage = chakra(Box, {
   baseStyle: {
@@ -138,9 +139,12 @@ export default function Home() {
         <canvas id="canvas" width="500" height="500" ref={canvasRef}></canvas>
         <Box key={currentTurn}>
           {chatHistory.current.length === 0 && currentRoundNumber === 1 && (
-            <StartButton onClick={() => setCurrentTurn('assistant')} size="sm">
-              Start the game
-            </StartButton>
+            <>
+              <GameStart />
+              <StartButton onClick={() => setCurrentTurn('assistant')} size="sm">
+                Start the game
+              </StartButton>
+            </>
           )}
           {chatHistory.current.map((ele, idx) => {
             if (ele.role === 'assistant') {

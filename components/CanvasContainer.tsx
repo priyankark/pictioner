@@ -10,6 +10,7 @@ const CanvasContainer = ({ children }: { children: JSX.Element }) => {
             borderWidth="1px"
             borderColor="gray.200"
             borderRadius="md"
+            boxShadow={"lg"}
             overflow="hidden"
         >
             {children}

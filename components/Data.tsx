@@ -1,4 +1,3 @@
-"use client";
 import { useEffect, useRef, useState, Suspense } from 'react'
 import { Box, Button, Input, chakra } from '@chakra-ui/react';
 import { GameStart } from './GameStart';

@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState, Suspense } from 'react'
-import { Box, Button, Input, chakra } from '@chakra-ui/react';
+import { Box, Button, Grid, Input, chakra } from '@chakra-ui/react';
 import { GameStart } from './GameStart';
 import Leaderboard from './Leaderboard';
 import va from '@vercel/analytics';
+import CanvasContainer from './CanvasContainer';
+import MotionBox from './MotionBox';
 
 const AssistantMessage = chakra(Box, {
   baseStyle: {
@@ -10,6 +12,7 @@ const AssistantMessage = chakra(Box, {
     borderRadius: 'md',
     bg: 'gray.200',
     mb: '4',
+    width: '100%',
   },
 });
 
@@ -19,6 +22,7 @@ const UserMessage = chakra(Box, {
     borderRadius: 'md',
     bg: 'teal.200',
     mb: '4',
+    width: '100%',
   },
 });
 
@@ -137,108 +141,201 @@ export default function Home() {
 
   return (
     (<Suspense fallback={<div>Loading...</div>}>
-      <Box>
-        <Box>
-          {chatHistory.current.length === 0 && currentRoundNumber === 1 && (
-            <Box verticalAlign={'space-between'} alignItems={'center'} gap={20}>
-              <Box>
-                <GameStart />
-              </Box>
-              <Box alignItems={'center'} justifyContent={'center'} style={{ paddingLeft: 50 }}>
-                <StartButton onClick={() => {
-                  va.track('game-started');
-                  setHasGameStarted(true);
-                  setCurrentTurn('assistant')
-                }} size="sm">
+      {
+        !hasGameStarted && (
+          <Grid
+            templateRows="1fr"
+            templateColumns={{ base: '1fr', md: '1fr 1fr' }}
+            gap={4}
+            alignItems="center"
+            maxWidth="500px"
+            marginX="auto"
+          >
+            <Box>
+              <GameStart />
+            </Box>
+            <Box>
+              <MotionBox
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                alignItems="center"
+                justifyContent="center"
+              >
+                <StartButton
+                  onClick={() => {
+                    va.track('game-started');
+                    setHasGameStarted(true);
+                    setCurrentTurn('assistant');
+                  }}
+                  size="sm"
+                >
                   Start the game
                 </StartButton>
-              </Box>
+              </MotionBox>
             </Box>
-          )}
-          {hasGameStarted && <canvas id="canvas" width="500" height="500" ref={canvasRef}></canvas>}
-          {chatHistory.current.map((ele, idx) => {
-            if (ele.role === 'assistant') {
-              const sanitizedTextWithoutAnswer = ele.content.replace(/~[^~]*~/g, '');
-              const ctxIndex = sanitizedTextWithoutAnswer.indexOf('ctx');
-              if (ctxIndex !== -1) {
-                const sanitizeText = sanitizedTextWithoutAnswer.slice(0, ctxIndex);
+          </Grid>
+        )
+      }
+      {hasGameStarted &&
+        <Box
+          height="100vh"
+          display="flex"
+          flexDirection={{ base: 'column', md: 'row' }}
+          justifyContent="center"
+          alignItems="center"
+          padding={4}
+          overflowY="auto"
+        >
+          <Box
+            maxWidth={{ base: '100%', md: '50%' }}
+            flex="1"
+            marginX={{ base: 'auto', md: '0' }}
+            marginBottom={{ base: '4', md: '0' }}
+          >
+            {chatHistory.current.map((ele, idx) => {
+              if (ele.role === 'assistant') {
+                const sanitizedTextWithoutAnswer = ele.content.replace(/~[^~]*~/g, '');
+                const ctxIndex = sanitizedTextWithoutAnswer.indexOf('ctx');
+                if (ctxIndex !== -1) {
+                  const sanitizeText = sanitizedTextWithoutAnswer.slice(0, ctxIndex);
+                  return (
+                    <AssistantMessage key={idx} maxWidth="500px" width="100%" marginX="auto">
+                      <Box>
+                        <p><strong>{ele.role}</strong></p>
+                        <p>{sanitizeText}</p>
+                      </Box>
+                    </AssistantMessage>
+                  );
+                }
                 return (
-                  <AssistantMessage key={idx}>
-                    <p>{ele.role}</p>
-                    <p>{sanitizeText}</p>
+                  <AssistantMessage key={idx} maxWidth="500px" width="100%" marginX="auto">
+                    <Box>
+                      <p><strong>{ele.role}</strong></p>
+                      <p>{sanitizedTextWithoutAnswer}</p>
+                    </Box>
                   </AssistantMessage>
                 );
               }
-              return (
-                <AssistantMessage key={idx}>
-                  <p>{ele.role}</p>
-                  <p>{sanitizedTextWithoutAnswer}</p>
-                </AssistantMessage>
-              );
-            }
-            if (ele.role === 'user') {
-              if (ele.content.includes('Previous round drawings')) {
-                return (
-                  <UserMessage key={idx}>
-                    <p>{ele.role}</p>
-                    <p>{ele.content.slice(0, ele.content.indexOf('Previous round drawings'))}</p>
-                  </UserMessage>
-                );
+              if (ele.role === 'user') {
+                if (ele.content.includes('Previous round drawings')) {
+                  return (
+                    <UserMessage key={idx} maxWidth="500px" width="100%" marginX="auto">
+                      <Box>
+                        <p><strong>{ele.role}</strong></p>
+                        <p>{ele.content.slice(0, ele.content.indexOf('Previous round drawings'))}</p>
+                      </Box>
+                    </UserMessage>
+                  );
+                }
               }
-            }
-            return (
-              <UserMessage key={idx}>
-                <p>{ele.role}</p>
-                <p>{ele.content}</p>
+              return (
+                <UserMessage key={idx} maxWidth="500px" width="100%" marginX="auto">
+                  <Box>
+                    <p><strong>{ele.role}</strong></p>
+                    <p>{ele.content}</p>
+                  </Box>
+                </UserMessage>
+              );
+            })}
+            {currentTurn === 'user' && chatHistory.current.length > 0 && !chatHistory.current[chatHistory.current.length - 1]?.content.includes('YOU WIN') && !chatHistory.current[chatHistory.current.length - 1]?.content.includes('YOU LOSE') && (
+              <UserMessage maxWidth="500px" width="100%" marginX="auto">
+                <Box marginBottom={2}>
+                  <p><strong>user</strong></p>
+                </Box>
+                <Box display="flex" alignItems="center" justifyContent="space-between">
+                  <Box flex="1">
+                    <UserInput type="text" onChange={(ev) => setUserinput(ev.target.value)} />
+                  </Box>
+                  <Box marginLeft="2">
+                    <Button onClick={() => setCurrentTurn('assistant')} size="sm">
+                      Submit
+                    </Button>
+                  </Box>
+                </Box>
               </UserMessage>
-            );
-          })}
-          {currentTurn === 'user' && chatHistory.current.length > 0 && !chatHistory.current[chatHistory.current.length - 1]?.content.includes('YOU WIN') && !chatHistory.current[chatHistory.current.length - 1]?.content.includes('YOU LOSE') && (
-            <UserMessage>
-              <p>User</p>
-              <UserInput type="text" onChange={(ev) => setUserinput(ev.target.value)} />
-              <Button onClick={() => setCurrentTurn('assistant')} size="sm">
-                Submit
-              </Button>
-            </UserMessage>
-          )}
-          {(chatHistory.current[chatHistory.current.length - 1]?.content?.includes('YOU WIN') || chatHistory.current[chatHistory.current.length - 1]?.content?.includes('YOU LOSE')) && (
-            <Box alignItems={'horizontal'}>
-              <Box>
-                <Button
-                  onClick={() => {
-                    if (chatHistory.current[chatHistory.current.length - 1]?.content?.includes('YOU WIN')) {
-                      setCurrentRoundNumber((n) => n + 1);
-                      previousRoundsDrawings.current.push(chatHistory.current[chatHistory.current.length - 2]?.content);
-                      console.log(`previousRoundDrawings`, previousRoundsDrawings.current);
-                      setUserinput(
-                        `start round ${currentRoundNumber + 1}. Previous round drawings were: ${previousRoundsDrawings.current.join(', ')}. Please AVOID drawing these again this round and in future rounds.`
-                      );
-                      setCurrentTurn('assistant');
-                      canvasRef.current?.getContext('2d')?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-                      chatHistory.current = []; // Remove everything from chat history except the last element
-                      setNextRoundButton(false);
-                    } else {
-                      setCurrentRoundNumber(1);
-                      previousRoundsDrawings.current = [];
-                      setUserinput(`start round 1`);
-                      setCurrentTurn('assistant');
-                      canvasRef.current?.getContext('2d')?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-                      chatHistory.current = []; // Remove everything from chat history except the last element
-                      setNextRoundButton(false);
-                    }
-                  }}
-                >
-                  {chatHistory.current[chatHistory.current.length - 1]?.content?.includes('YOU WIN') ? 'Start next round' : 'Retry'}
-                </Button>
-              </Box>
-              <Box>
-                <Leaderboard currentRound={currentRoundNumber} />
-              </Box>
+
+            )}
+            {(chatHistory.current[chatHistory.current.length - 1]?.content?.includes('YOU WIN') || chatHistory.current[chatHistory.current.length - 1]?.content?.includes('YOU LOSE')) && (
+              <Grid
+                templateRows="1fr"
+                templateColumns={{ base: '1fr', md: '1fr 1fr' }}
+                gap={4}
+                alignItems="center"
+                maxWidth="500px"
+                width="100%"
+                marginX="auto"
+              >
+                <Box>
+                  <MotionBox
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <Button
+                      onClick={() => {
+                        if (chatHistory.current[chatHistory.current.length - 1]?.content?.includes('YOU WIN')) {
+                          setCurrentRoundNumber((n) => n + 1);
+                          previousRoundsDrawings.current.push(
+                            chatHistory.current[chatHistory.current.length - 2]?.content
+                          );
+                          console.log(`previousRoundDrawings`, previousRoundsDrawings.current);
+                          setUserinput(
+                            `start round ${currentRoundNumber + 1}. Previous round drawings were: ${previousRoundsDrawings.current.join(
+                              ', '
+                            )}. Please AVOID drawing these again this round and in future rounds.`
+                          );
+                          setCurrentTurn('assistant');
+                          canvasRef.current?.getContext('2d')?.clearRect(
+                            0,
+                            0,
+                            canvasRef.current.width,
+                            canvasRef.current.height
+                          );
+                          chatHistory.current = []; // Remove everything from chat history except the last element
+                          setNextRoundButton(false);
+                        } else {
+                          setCurrentRoundNumber(1);
+                          previousRoundsDrawings.current = [];
+                          setUserinput(`start round 1`);
+                          setCurrentTurn('assistant');
+                          canvasRef.current?.getContext('2d')?.clearRect(
+                            0,
+                            0,
+                            canvasRef.current.width,
+                            canvasRef.current.height
+                          );
+                          chatHistory.current = []; // Remove everything from chat history except the last element
+                          setNextRoundButton(false);
+                        }
+                      }}
+                    >
+                      {chatHistory.current[chatHistory.current.length - 1]?.content?.includes('YOU WIN')
+                        ? 'Start next round'
+                        : 'Retry'}
+                    </Button>
+                  </MotionBox>
+                </Box>
+                <Box>
+                  <Leaderboard currentRound={currentRoundNumber} />
+                </Box>
+              </Grid>
+            )}
+          </Box>
+          {hasGameStarted && (
+            <Box
+              maxWidth={{ base: '100%', md: '50%' }}
+              flex="1"
+              marginX={{ base: 'auto', md: '0' }}
+              marginBottom={{ base: '4', md: '0' }}
+            >
+              <CanvasContainer>
+                <canvas id="canvas" width="500" height="500" ref={canvasRef}></canvas>
+              </CanvasContainer>
             </Box>
           )}
         </Box>
-      </Box>
+      }
     </Suspense>
     )
   );

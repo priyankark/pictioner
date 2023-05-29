@@ -328,9 +328,10 @@ export default function Home() {
               flex="1"
               marginX={{ base: 'auto', md: '0' }}
               marginBottom={{ base: '4', md: '0' }}
+              marginLeft={{ base: '4', md: '4' }}
             >
               <CanvasContainer>
-                <canvas id="canvas" width="500" height="500" ref={canvasRef}></canvas>
+                <canvas id="canvas" width="500" height="500" ref={canvasRef} style={{ backgroundColor: 'white' }}></canvas>
               </CanvasContainer>
             </Box>
           )}

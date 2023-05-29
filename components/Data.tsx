@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState, Suspense } from 'react'
 import { Box, Button, Input, chakra } from '@chakra-ui/react';
 import { GameStart } from './GameStart';
+import Leaderboard from './Leaderboard';
 
 const AssistantMessage = chakra(Box, {
   baseStyle: {
@@ -231,9 +232,7 @@ export default function Home() {
                 </Button>
               </Box>
               <Box>
-                <Button>
-                  {'Enter Leaderboard'}
-                </Button>
+                <Leaderboard currentRound={currentRoundNumber} />
               </Box>
             </Box>
           )}

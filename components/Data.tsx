@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, Suspense } from 'react'
 import { Box, Button, Input, chakra } from '@chakra-ui/react';
 import { GameStart } from './GameStart';
 import Leaderboard from './Leaderboard';
+import va from '@vercel/analytics';
 
 const AssistantMessage = chakra(Box, {
   baseStyle: {
@@ -146,6 +147,7 @@ export default function Home() {
               </Box>
               <Box alignItems={'center'} justifyContent={'center'} style={{ paddingLeft: 50 }}>
                 <StartButton onClick={() => {
+                  va.track('game-started');
                   setHasGameStarted(true);
                   setCurrentTurn('assistant')
                 }} size="sm">

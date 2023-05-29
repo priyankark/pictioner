@@ -9,20 +9,23 @@ import MotionBox from './MotionBox';
 const AssistantMessage = chakra(Box, {
   baseStyle: {
     p: '4',
-    borderRadius: 'md',
+    borderRadius: 'lg',
     bg: 'gray.200',
     mb: '4',
     width: '100%',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
   },
 });
 
 const UserMessage = chakra(Box, {
   baseStyle: {
     p: '4',
-    borderRadius: 'md',
-    bg: 'teal.200',
+    borderRadius: 'lg',
+    bg: 'purple.300',
+    color: 'white',
     mb: '4',
     width: '100%',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
   },
 });
 
@@ -31,12 +34,13 @@ const StartButton = chakra(Button, {
     fontSize: 'xl',
     px: '8',
     py: '4',
-    bg: 'teal.500',
+    bg: 'purple.500',
     color: 'white',
-    borderRadius: 'md',
+    borderRadius: 'full',
     _hover: {
-      bg: 'teal.600',
+      bg: 'purple.600',
     },
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
   },
 });
 
@@ -48,6 +52,7 @@ const UserInput = chakra(Input, {
     p: '2',
     mr: '2',
     flex: '1',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
   },
 });
 
@@ -248,7 +253,7 @@ export default function Home() {
                     <UserInput type="text" onChange={(ev) => setUserinput(ev.target.value)} />
                   </Box>
                   <Box marginLeft="2">
-                    <Button onClick={() => setCurrentTurn('assistant')} size="sm">
+                    <Button onClick={() => setCurrentTurn('assistant')} size="sm" backgroundColor={'gray.500'} color={'white'}>
                       Submit
                     </Button>
                   </Box>

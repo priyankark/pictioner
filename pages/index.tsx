@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Pictioer</title>
+        <title>Pictioner</title>
         <meta name="description" content="Fun Pictionary game! Try to beat AI at Pictionary" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />

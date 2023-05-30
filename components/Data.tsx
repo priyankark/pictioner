@@ -185,6 +185,7 @@ export default function Home() {
           display="flex"
           flexDirection={{ base: 'column', md: 'row' }}
           justifyContent="center"
+          flexWrap="wrap"
           alignItems="start"
           padding={4}
         >
@@ -193,6 +194,7 @@ export default function Home() {
             flex="1"
             marginX={{ base: 'auto', md: '0' }}
             marginBottom={{ base: '4', md: '0' }}
+            minHeight={"80vh"}
             height="80vh"
             overflowY="auto"
           >
@@ -331,6 +333,7 @@ export default function Home() {
               marginX={{ base: 'auto', md: '0' }}
               marginBottom={{ base: '4', md: '0' }}
               marginLeft={{ base: '4', md: '4' }}
+              minHeight="50vh"
             >
               <CanvasContainer>
                 <canvas id="canvas" width="500" height="500" ref={canvasRef} style={{ backgroundColor: 'white' }}></canvas>

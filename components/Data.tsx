@@ -145,38 +145,43 @@ export default function Home() {
     (<Suspense fallback={<div>Loading...</div>}>
       {
         !hasGameStarted && (
-          <Grid
-            templateRows="1fr"
-            templateColumns={{ base: '1fr', md: '1fr 1fr' }}
-            gap={4}
-            alignItems="center"
-            maxWidth="500px"
-            marginX="auto"
-          >
-            <Box>
-              <GameStart />
-            </Box>
-            <Box>
-              <MotionBox
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                alignItems="center"
-                justifyContent="center"
-              >
-                <StartButton
-                  onClick={() => {
-                    va.track('game-started');
-                    setHasGameStarted(true);
-                    setCurrentTurn('assistant');
-                  }}
-                  size="sm"
+          <Box textAlign="center">
+            <Grid
+              templateRows="1fr"
+              templateColumns="1fr"
+              gap={4}
+              alignItems="center"
+              justifyContent="center"
+              maxWidth="500px"
+              marginX="auto"
+            >
+              <Box>
+                <GameStart />
+              </Box>
+              <Box alignItems={'center'} justifyContent={'center'}>
+                <MotionBox
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  alignItems="center"
+                  justifyContent="center"
                 >
-                  Start the game
-                </StartButton>
-              </MotionBox>
-            </Box>
-          </Grid>
+                  <StartButton
+                    onClick={() => {
+                      va.track('game-started');
+                      setHasGameStarted(true);
+                      setCurrentTurn('assistant');
+                    }}
+                    size="sm"
+                    shadow={'lg'}
+                    mx="auto"
+                  >
+                    Start the game
+                  </StartButton>
+                </MotionBox>
+              </Box>
+            </Grid>
+          </Box>
         )
       }
       {hasGameStarted &&
@@ -326,7 +331,7 @@ export default function Home() {
               </Grid>
             )}
           </Box>
-          {hasGameStarted && chatHistory.current.length >0 && (
+          {hasGameStarted && chatHistory.current.length > 0 && (
             <Box
               maxWidth={{ base: '100%', md: '50%' }}
               flex="1"

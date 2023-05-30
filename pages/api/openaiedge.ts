@@ -38,7 +38,7 @@ export default async function handler(
                     "model": "gpt-4-0314",
                     stream: true,
                     max_tokens: 2800,
-                    temperature: 0.3
+                    temperature: 0
                 }),
                 onmessage: (event: EventSourceMessage) => {
                     controller.enqueue(encoder.encode(`data: ${event.data}\n\n`));

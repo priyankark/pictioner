@@ -2,7 +2,6 @@ export const themes = {
     "themes": [
         "Apple",
         "Guitar",
-        "Elephant",
         "Pizza",
         "Sun",
         "Glasses",
@@ -62,7 +61,6 @@ export const themes = {
         "Christmas Tree",
         "Eiffel Tower",
         "Feather",
-        "Horse",
         "Ice Skate",
         "Kite",
         "Leaves",

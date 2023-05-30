@@ -84,8 +84,6 @@ export default function Home() {
       const eventSource = new EventSource(`/api/openaiedge?history=${encodeURIComponent(JSON.stringify(chatHistory.current))}`)
 
       eventSource.onmessage = (event) => {
-        console.log('initiate');
-        console.log(event);
         const sanitized = event.data.replace("data: ", "").trim();
         if (sanitized === "[DONE]") {
           setData("");
@@ -94,7 +92,6 @@ export default function Home() {
         } else {
           const { choices } = JSON.parse(sanitized)
           const text = choices[0].delta?.content ?? ''
-          console.log(text);
           //Update chat history
           if (chatHistory.current[chatHistory.current.length - 1]?.role !== 'assistant') {
             chatHistory.current.push({
@@ -108,7 +105,6 @@ export default function Home() {
           if (text.includes('ctx')) {
             currentInstructionRef.current = text;
           } else if (currentInstructionRef.current) {
-            console.log(`Current Instruction`, currentInstructionRef.current);
             if (text.includes(';')) {
               try {
                 eval(currentInstructionRef.current + text);
@@ -286,7 +282,6 @@ export default function Home() {
                           previousRoundsDrawings.current.push(
                             chatHistory.current[chatHistory.current.length - 2]?.content
                           );
-                          console.log(`previousRoundDrawings`, previousRoundsDrawings.current);
                           setUserinput(
                             `start round ${currentRoundNumber + 1}. Previous round drawings were: ${previousRoundsDrawings.current.join(
                               ', '

@@ -26,7 +26,7 @@ const PrivacyPolicy = () => {
         We do not use any cookies or tracking technologies to collect information about your browsing behavior on our website. 
       </Text>
       <Text>
-        We do log some basic telemetry related to button click like when you click on the "Start Game" button. This is strictly done to help us understand how our users interact with our website and improve the user experience.
+        We do log some basic telemetry related to button click like when you click on the Start Game button. This is strictly done to help us understand how our users interact with our website and improve the user experience.
         The statistics are anonymized and do not contain any personally identifiable information.
       </Text>
       <Heading as="h2" fontSize="xl" mt={8} mb={4}>

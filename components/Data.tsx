@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState, Suspense } from 'react'
 import { Box, Button, Grid, Input, chakra } from '@chakra-ui/react';
 import { GameStart } from './GameStart';
-import Leaderboard from './Leaderboard';
 import va from '@vercel/analytics';
 import CanvasContainer from './CanvasContainer';
 import MotionBox from './MotionBox';
+import ScoreCard from './ScoreCard';
 
 const AssistantMessage = chakra(Box, {
   baseStyle: {
@@ -321,7 +321,7 @@ export default function Home() {
                   </MotionBox>
                 </Box>
                 <Box>
-                  <Leaderboard currentRound={currentRoundNumber} />
+                  <ScoreCard currentRound={currentRoundNumber} />
                 </Box>
               </Grid>
             )}

@@ -185,7 +185,7 @@ export default function Home() {
             {
               <Alert status="warning" mb={4}>
                 <AlertIcon />
-                This game doesn't work well on mobile based browsers yet!
+                {`This game doesn't work well on mobile based browsers yet!`}
               </Alert>
             }
 

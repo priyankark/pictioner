@@ -26,7 +26,7 @@ export default async function handler(
             // choose 5 random themes
             const themesForThisRound = themes.themes.sort(() => Math.random() - Math.random()).slice(0, 5);
             const systemPrompt = basePrompt[0].content + `\n\nSome themes for this round that you can consider drawing (choose one): ${themesForThisRound.join(', ')}`;
-            console.log(`themes for this round: ${themesForThisRound}}`)
+            console.log(`themes for this round: ${themesForThisRound}`)
             await fetchEventSource('https://api.openai.com/v1/chat/completions', {
                 method: 'POST',
                 headers: {

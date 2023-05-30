@@ -189,7 +189,7 @@ export default function Home() {
           display="flex"
           flexDirection={{ base: 'column', md: 'row' }}
           justifyContent="center"
-          alignItems="center"
+          alignItems="start"
           padding={4}
         >
           <Box

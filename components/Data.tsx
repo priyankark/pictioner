@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, Suspense } from 'react'
-import { Box, Button, Grid, Input, chakra } from '@chakra-ui/react';
+import { Alert, AlertIcon, Box, Button, Grid, Input, chakra } from '@chakra-ui/react';
 import { GameStart } from './GameStart';
 import va from '@vercel/analytics';
 import CanvasContainer from './CanvasContainer';
@@ -149,9 +149,10 @@ export default function Home() {
             <Grid
               templateRows="1fr"
               templateColumns="1fr"
-              gap={4}
+              gap={1}
               alignItems="center"
               justifyContent="center"
+              minWidth={"300px"}
               maxWidth="500px"
               marginX="auto"
             >
@@ -181,6 +182,13 @@ export default function Home() {
                 </MotionBox>
               </Box>
             </Grid>
+            {
+              <Alert status="warning" mb={4}>
+                <AlertIcon />
+                This game doesn't work well on mobile based browsers yet!
+              </Alert>
+            }
+
           </Box>
         )
       }

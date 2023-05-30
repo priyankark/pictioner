@@ -5,6 +5,7 @@ import va from '@vercel/analytics';
 import CanvasContainer from './CanvasContainer';
 import MotionBox from './MotionBox';
 import ScoreCard from './ScoreCard';
+import { Varta } from 'next/font/google';
 
 const AssistantMessage = chakra(Box, {
   baseStyle: {
@@ -314,6 +315,7 @@ export default function Home() {
                         } else {
                           setCurrentRoundNumber(1);
                           va.track(`round-lost-${currentRoundNumber}}`);
+                          va.track(`wrong-answer-${chatHistory.current[chatHistory.current.length - 2]?.content}}`)
                           previousRoundsDrawings.current = [];
                           setUserinput(`start round 1`);
                           setCurrentTurn('assistant');

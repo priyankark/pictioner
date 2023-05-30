@@ -313,6 +313,7 @@ export default function Home() {
                           setNextRoundButton(false);
                         } else {
                           setCurrentRoundNumber(1);
+                          va.track(`round-lost-${currentRoundNumber}}`);
                           previousRoundsDrawings.current = [];
                           setUserinput(`start round 1`);
                           setCurrentTurn('assistant');

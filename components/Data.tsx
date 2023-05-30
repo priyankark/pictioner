@@ -191,13 +191,14 @@ export default function Home() {
           justifyContent="center"
           alignItems="center"
           padding={4}
-          overflowY="auto"
         >
           <Box
             maxWidth={{ base: '100%', md: '50%' }}
             flex="1"
             marginX={{ base: 'auto', md: '0' }}
             marginBottom={{ base: '4', md: '0' }}
+            height="80vh"
+            overflowY="auto"
           >
             {chatHistory.current.map((ele, idx) => {
               if (ele.role === 'assistant') {
@@ -328,7 +329,7 @@ export default function Home() {
               </Grid>
             )}
           </Box>
-          {hasGameStarted && (
+          {hasGameStarted && chatHistory.current.length >0 && (
             <Box
               maxWidth={{ base: '100%', md: '50%' }}
               flex="1"

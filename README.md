@@ -4,7 +4,18 @@ Pictioner is a fun game that you can play with GPT.
 GPT draws something on the canvas that the user needs to guess within three tries.
 
 ## Play the game
-The game is hosted on [pictioner.com](https://pictioner.com/).
+The game is hosted on [pictioner.com](https://pictioner.com/) and can be played there.
+
+## Tech Stack
+
+- [Next.js](https://nextjs.org/)
+- [Chakra UI](https://chakra-ui.com/)
+- [OpenAI API](https://beta.openai.com/)
+- [Vercel](https://vercel.com/)
+
+## Code quality
+This is still a work in progress, so the code quality is not the best yet.
+Please feel free to contribute to the project to improve the code quality.
 
 ## Getting Started
 

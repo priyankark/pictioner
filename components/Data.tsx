@@ -315,7 +315,6 @@ export default function Home() {
                         } else {
                           setCurrentRoundNumber(1);
                           va.track(`round-lost-${currentRoundNumber}}`);
-                          va.track(`wrong-answer-${chatHistory.current[chatHistory.current.length - 2]?.content}}`)
                           previousRoundsDrawings.current = [];
                           setUserinput(`start round 1`);
                           setCurrentTurn('assistant');

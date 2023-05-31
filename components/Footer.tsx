@@ -6,10 +6,14 @@ const Footer = () => {
             <VStack spacing={4}>
                 <Link href="/privacy-policy">Privacy Policy</Link>
                 <Text>
-                    <center>
-                        <strong>Notice:</strong> GPT costs money. The developer can afford to run this website for free for a limited time only per month. If you like this website, please consider donating to help keep it running.
-                        <br />Or Self-host: <Link href="https://github.com/priyankark/pictioner" color={"blue"} isExternal>Get the source code</Link>
-                    </center>
+                    <Flex direction="column" align="center" justify="center" gap={2}>
+                        <Box>
+                            <strong>Notice:</strong> GPT costs money. The developer can afford to run this website for free for a limited time only per month. If you like this website, please consider donating to help keep it running.
+                        </Box>
+                        <Box>
+                            Or Self-host: <Link href="https://github.com/priyankark/pictioner" color={"blue"} isExternal>Get the source code</Link>
+                        </Box>
+                    </Flex>
                 </Text>
                 <Text>
                     &copy; {new Date().getFullYear()} Priyankar Kumar |{' '}
@@ -20,7 +24,7 @@ const Footer = () => {
                 <Flex direction="row" align="center" justify="center" gap={2}>
                     <Box>
                         <Link href="https://www.producthunt.com/posts/pictioner?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-pictioner" isExternal>
-                            <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=397158&theme=light" alt="Pictioner - Test&#0032;your&#0032;wits&#0032;against&#0032;GPT&#0045;4&#0032;in&#0032;a&#0032;fun&#0032;art&#0032;guessing&#0032;game | Product Hunt" style={{ width: "250px", height: "54px" }} width="250" height="54" />
+                            <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=397158&theme=light" alt="Pictioner - Test your wits against GPT-4 in a fun art guessing game | Product Hunt" style={{ width: "250px", height: "54px" }} width="250" height="54" />
                         </Link>
                     </Box>
                     <Box>

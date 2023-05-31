@@ -5,7 +5,12 @@ const Footer = () => {
         <Box as="footer" py={8} px={4} bg="gray.200">
             <VStack spacing={4}>
                 <Link href="/privacy-policy">Privacy Policy</Link>
-                <Link href="https://github.com/priyankark/pictioner" isExternal>Get the source code</Link>
+                <Text>
+                    <center>
+                        <strong>Notice:</strong> GPT costs money. The developer can afford to run this website for free for a limited time only per month. If you like this website, please consider donating to help keep it running.
+                        <br />Or Self-host: <Link href="https://github.com/priyankark/pictioner" color={"blue"} isExternal>Get the source code</Link>
+                    </center>
+                </Text>
                 <Text>
                     &copy; {new Date().getFullYear()} Priyankar Kumar |{' '}
                     <Link href="https://priyankar.me" isExternal>

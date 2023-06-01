@@ -6,6 +6,7 @@ import CanvasContainer from './CanvasContainer';
 import MotionBox from './MotionBox';
 import ScoreCard from './ScoreCard';
 import { Varta } from 'next/font/google';
+import { FeedbackCapture } from './Feedback';
 
 const AssistantMessage = chakra(Box, {
   baseStyle: {
@@ -370,6 +371,11 @@ export default function Home() {
           </Box>
         )}
       </Box>
+    }
+    {
+      hasGameStarted && (
+        <FeedbackCapture />
+      )
     }
   </>
   );

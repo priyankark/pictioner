@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, Suspense } from 'react'
+import React, { useEffect, useRef, useState, Suspense } from 'react'
 import { Alert, AlertIcon, Box, Button, Grid, Input, chakra } from '@chakra-ui/react';
 import { GameStart } from './GameStart';
 import va from '@vercel/analytics';
@@ -142,6 +142,14 @@ export default function Home() {
     }
   }, [currentTurn, userInput])
 
+  React.useEffect(() => {
+    if (chatHistory.current[chatHistory.current.length - 1]?.content?.includes('YOU LOSE')) {
+      va.track(`game-lost-${currentRoundNumber}`, { content: chatHistory.current[chatHistory.current.length - 1]?.content });
+    } else if (chatHistory.current[chatHistory.current.length - 1]?.content?.includes('YOU WIN')) {
+      va.track(`game-won-${currentRoundNumber}`, { content: chatHistory.current[chatHistory.current.length - 1]?.content });
+    }
+  }, [chatHistory.current[chatHistory.current.length - 1]?.content, currentRoundNumber]);
+
   return (<>
     {
       !hasGameStarted && (
@@ -220,8 +228,8 @@ export default function Home() {
                 return (
                   <AssistantMessage key={idx} maxWidth="500px" width="100%" marginX="auto">
                     <Box>
-                      <p><strong>{ele.role}</strong></p>
-                      <p>{sanitizeText}</p>
+                      <Box><strong>{ele.role}</strong></Box>
+                      <Box>{sanitizeText}</Box>
                     </Box>
                   </AssistantMessage>
                 );
@@ -229,8 +237,8 @@ export default function Home() {
               return (
                 <AssistantMessage key={idx} maxWidth="500px" width="100%" marginX="auto">
                   <Box>
-                    <p><strong>{ele.role}</strong></p>
-                    <p>{sanitizedTextWithoutAnswer}</p>
+                    <Box><strong>{ele.role}</strong></Box>
+                    <Box>{sanitizedTextWithoutAnswer}</Box>
                   </Box>
                 </AssistantMessage>
               );
@@ -240,8 +248,8 @@ export default function Home() {
                 return (
                   <UserMessage key={idx} maxWidth="500px" width="100%" marginX="auto">
                     <Box>
-                      <p><strong>{ele.role}</strong></p>
-                      <p>{ele.content.slice(0, ele.content.indexOf('Previous round drawings'))}</p>
+                      <Box><strong>{ele.role}</strong></Box>
+                      <Box>{ele.content.slice(0, ele.content.indexOf('Previous round drawings'))}</Box>
                     </Box>
                   </UserMessage>
                 );
@@ -250,8 +258,8 @@ export default function Home() {
             return (
               <UserMessage key={idx} maxWidth="500px" width="100%" marginX="auto">
                 <Box>
-                  <p><strong>{ele.role}</strong></p>
-                  <p>{ele.content}</p>
+                  <Box><strong>{ele.role}</strong></Box>
+                  <Box>{ele.content}</Box>
                 </Box>
               </UserMessage>
             );
@@ -259,7 +267,7 @@ export default function Home() {
           {currentTurn === 'user' && chatHistory.current.length > 0 && !chatHistory.current[chatHistory.current.length - 1]?.content.includes('YOU WIN') && !chatHistory.current[chatHistory.current.length - 1]?.content.includes('YOU LOSE') && (
             <UserMessage maxWidth="500px" width="100%" marginX="auto">
               <Box marginBottom={2}>
-                <p><strong>user</strong></p>
+                <Box><strong>user</strong></Box>
               </Box>
               <Box display="flex" alignItems="center" justifyContent="space-between">
                 <Box flex="1">
@@ -294,6 +302,7 @@ export default function Home() {
                     onClick={() => {
                       if (chatHistory.current[chatHistory.current.length - 1]?.content?.includes('YOU WIN')) {
                         setCurrentRoundNumber((n) => n + 1);
+                        va.track('game-next-round');
                         previousRoundsDrawings.current.push(
                           chatHistory.current[chatHistory.current.length - 2]?.content
                         );
@@ -313,7 +322,7 @@ export default function Home() {
                         setNextRoundButton(false);
                       } else {
                         setCurrentRoundNumber(1);
-                        va.track(`round-lost-${currentRoundNumber}`);
+                        va.track('game-retry');
                         previousRoundsDrawings.current = [];
                         setUserinput(`start round 1`);
                         setCurrentTurn('assistant');

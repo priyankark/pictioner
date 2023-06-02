@@ -150,8 +150,6 @@ export default function Home() {
     if (!loggedVictoryForRound.includes(currentRoundNumber)) {
       if (chatHistory.current[chatHistory.current.length - 1]?.content?.includes('YOU LOSE')) {
         va.track(`game-lost-${currentRoundNumber}`, { content: chatHistory.current[chatHistory.current.length - 1]?.content });
-      } else if (chatHistory.current[chatHistory.current.length - 1]?.content?.includes('YOU WIN')) {
-        va.track(`game-won-${currentRoundNumber}`, { content: chatHistory.current[chatHistory.current.length - 1]?.content });
       }
       setLoggedVictoryForRound(prev => [...prev, currentRoundNumber]);
     }

@@ -8,10 +8,7 @@ const Footer = () => {
                 <Text>
                     <Flex direction="column" align="center" justify="center" gap={2}>
                         <Box>
-                            <strong>Notice:</strong> GPT costs money. The developer can afford to run this website for free for a limited time only per month. If you like this website, please consider donating to help keep it running.
-                        </Box>
-                        <Box>
-                            Or Self-host: <Link href="https://github.com/priyankark/pictioner" color={"blue"} isExternal>Get the source code</Link>
+                            <Link href="https://github.com/priyankark/pictioner" color={"blue"} isExternal>Get the source code</Link>
                         </Box>
                     </Flex>
                 </Text>

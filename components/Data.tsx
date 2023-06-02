@@ -341,6 +341,8 @@ export default function Home() {
                         setNextRoundButton(false);
                       }
                     }}
+                    backgroundColor={'purple.300'}
+                    color={'white'}
                   >
                     {chatHistory.current[chatHistory.current.length - 1]?.content?.includes('YOU WIN')
                       ? 'Start next round'

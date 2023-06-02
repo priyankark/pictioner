@@ -14,7 +14,7 @@ export default function Home() {
     <>
       <Head>
         <title>Pictioner</title>
-        <meta name="description" content="Fun Guessing Game! Try to beat the AI bot by guessing what the AI is drawing within three tries. Progress further on correct guesses and have endless hours of fun!" />
+        <meta name="description" content="Pictioner is a fun guessing game where users need to guess what GPT draws on the canvas within three tries. Users proceed to next rounds as they keep guessing things right or are eliminated when they get a guess wrong. Be ready for endless fun!" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

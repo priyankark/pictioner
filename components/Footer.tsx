@@ -8,7 +8,7 @@ const Footer = () => {
                 <Text>
                     <Flex direction="column" align="center" justify="center" gap={2}>
                         <Box>
-                            <Link href="https://github.com/priyankark/pictioner" color={"blue"} isExternal>Get the source code</Link>
+                            If the site is down: <Link href="https://github.com/priyankark/pictioner" color={"blue"} isExternal>Get the source code</Link>
                         </Box>
                     </Flex>
                 </Text>

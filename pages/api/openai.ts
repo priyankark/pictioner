@@ -27,7 +27,7 @@ export default async function handler(
             },
             body: JSON.stringify({
                 messages: [...basePrompt, ...history],
-                "model": "gpt-4-0314",
+                "model": "gpt-4",
                 stream: true,
                 max_tokens: 2800,
                 temperature: 0.3

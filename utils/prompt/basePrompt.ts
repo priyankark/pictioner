@@ -34,7 +34,7 @@ This tag will be removed before the drawing is shown to the user.
 - The canvas size is 500X500, ensure the drawing fits the canvas in the best possible way.
 - The code setup is already done for you as follows:
 const canvas = document.getElementById("drawingCanvas");
-const ctx = houseCanvas.getContext("2d");
+const ctx = canvas.getContext("2d");
 Use the 'ctx' property and simply come up with the right canvas instructions using the HTML canvas API.
 Example: ctx.fillRect(20, 20, 150, 100); will draw a rectangle on the canvas directly.
 - Avoid using any external libraries.

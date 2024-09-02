@@ -32,11 +32,23 @@ const HumanDraw = ({ onSubmit }: { onSubmit: (drawing: string) => void }) => {
     setIsDrawing(false);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const drawing = canvas.toDataURL();
     onSubmit(drawing);
+
+    // Add necessary OpenAI call for AI guessing
+    const response = await fetch('/api/openaiedge', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ drawing }),
+    });
+
+    const result = await response.json();
+    console.log('AI Guess:', result);
   };
 
   return (

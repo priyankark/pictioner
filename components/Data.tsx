@@ -16,6 +16,7 @@ import MotionBox from "./MotionBox";
 import ScoreCard from "./ScoreCard";
 import { Varta } from "next/font/google";
 import { FeedbackCapture } from "./Feedback";
+import HumanDraw from "./HumanDraw"; // Import HumanDraw component
 
 const AssistantMessage = chakra(Box, {
   baseStyle: {
@@ -84,6 +85,7 @@ export default function Home() {
   const [showNextRoundButton, setNextRoundButton] = useState(false);
   const currentRoundAnswerRef = useRef("");
   const [hasGameStarted, setHasGameStarted] = useState(false);
+  const [isHumanDrawing, setIsHumanDrawing] = useState(false); // Toggle for human drawing mode
 
   const previousRoundsDrawings = useRef<string[]>([]);
 
@@ -187,6 +189,12 @@ export default function Home() {
     currentRoundNumber,
     loggedVictoryForRound,
   ]);
+
+  const handleHumanDrawingSubmit = (drawing: string) => {
+    // Handle the submission of the human drawing
+    setUserinput(`Human drawing submitted: ${drawing}`);
+    setCurrentTurn("assistant");
+  };
 
   return (
     <>
@@ -524,6 +532,18 @@ export default function Home() {
                   style={{ backgroundColor: "white" }}
                 ></canvas>
               </CanvasContainer>
+            </Box>
+          )}
+          {isHumanDrawing && (
+            <Box
+              maxWidth={{ base: "100%", md: "50%" }}
+              flex="1"
+              marginX={{ base: "auto", md: "0" }}
+              marginBottom={{ base: "4", md: "0" }}
+              marginLeft={{ base: "4", md: "4" }}
+              minHeight="50vh"
+            >
+              <HumanDraw onSubmit={handleHumanDrawingSubmit} />
             </Box>
           )}
         </Box>

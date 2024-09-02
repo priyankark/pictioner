@@ -6,6 +6,7 @@ import styles from '@/styles/Home.module.css'
 import dynamic from 'next/dynamic'
 import Data from '../components/Data';
 import Footer from '@/components/Footer';
+import HumanDraw from '@/components/HumanDraw'; // Import HumanDraw component
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,6 +22,7 @@ export default function Home() {
       <Header />
       <main className={`${styles.main}`}>
         <Data />
+        <HumanDraw onSubmit={(drawing) => console.log(drawing)} /> {/* Include HumanDraw component */}
       </main>
       <Footer />
     </>

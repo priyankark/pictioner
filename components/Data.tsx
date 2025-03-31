@@ -16,6 +16,7 @@ import MotionBox from "./MotionBox";
 import ScoreCard from "./ScoreCard";
 import { Varta } from "next/font/google";
 import { FeedbackCapture } from "./Feedback";
+import AIvsHuman from "./AIvsHuman";
 
 const AssistantMessage = chakra(Box, {
   baseStyle: {
@@ -84,6 +85,7 @@ export default function Home() {
   const [showNextRoundButton, setNextRoundButton] = useState(false);
   const currentRoundAnswerRef = useRef("");
   const [hasGameStarted, setHasGameStarted] = useState(false);
+  const [gameMode, setGameMode] = useState<"AIvsHuman" | "AIvsUser">("AIvsUser");
 
   const previousRoundsDrawings = useRef<string[]>([]);
 
@@ -228,6 +230,28 @@ export default function Home() {
                 </StartButton>
               </MotionBox>
             </Box>
+            <Box alignItems={"center"} justifyContent={"center"}>
+              <MotionBox
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                alignItems="center"
+                justifyContent="center"
+              >
+                <StartButton
+                  onClick={() => {
+                    va.track("game-started");
+                    setHasGameStarted(true);
+                    setGameMode("AIvsHuman");
+                  }}
+                  size="sm"
+                  shadow={"lg"}
+                  mx="auto"
+                >
+                  Start AI vs Human game
+                </StartButton>
+              </MotionBox>
+            </Box>
           </Grid>
           {
             <Alert status="warning" mb={4}>
@@ -278,7 +302,7 @@ export default function Home() {
           }
         </Box>
       )}
-      {hasGameStarted && (
+      {hasGameStarted && gameMode === "AIvsUser" && (
         <Box
           height="100vh"
           display="flex"
@@ -528,6 +552,7 @@ export default function Home() {
           )}
         </Box>
       )}
+      {hasGameStarted && gameMode === "AIvsHuman" && <AIvsHuman />}
       {hasGameStarted && <FeedbackCapture />}
     </>
   );

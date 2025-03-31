@@ -22,7 +22,7 @@
     "eventsource-parser": "^1.0.0",
     "framer-motion": "^10.12.16",
     "i": "^0.3.7",
-    "next": "13.4.4",
+    "next": "14.2.25",
     "node-fetch": "^2.6.7",
     "npm": "^9.6.7",
     "react": "18.2.0",
